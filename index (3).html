@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>占いMODシステム｜VIP購入者限定特典</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#08080f;--surface:#131320;--surface2:#1a1a2e;--border:rgba(130,100,255,0.18);--border2:rgba(130,100,255,0.4);--purple:#9b87ff;--purple2:#6c5ce7;--purple-dim:rgba(155,135,255,0.1);--gold:#f0c060;--gold-dim:rgba(240,192,96,0.1);--teal:#4ecdc4;--teal-dim:rgba(78,205,196,0.1);--warn:#EF9F27;--warn-dim:rgba(239,159,39,0.1);--ok:#1e8a4a;--ok-dim:rgba(30,138,74,0.1);--text:#e8e6f4;--text2:#9990bb;--text3:#4a4466;--r:12px;--r-sm:8px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:15px;line-height:1.7;min-height:100vh;overflow-x:hidden;}
+.bg-glow{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 60% 40% at 15% 15%,rgba(108,92,231,0.12) 0%,transparent 60%),radial-gradient(ellipse 50% 35% at 85% 85%,rgba(78,205,196,0.07) 0%,transparent 55%);}
+.wrap{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:0 20px 100px;}
+header{text-align:center;padding:64px 0 48px;border-bottom:1px solid var(--border);margin-bottom:48px;}
+.badge-vip{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:0.14em;color:var(--gold);background:var(--gold-dim);border:1px solid rgba(240,192,96,0.25);border-radius:99px;padding:5px 16px;margin-bottom:20px;}
+h1{font-family:'Zen Kaku Gothic New',sans-serif;font-size:clamp(26px,5vw,42px);font-weight:700;color:#fff;letter-spacing:0.05em;margin-bottom:14px;line-height:1.25;}
+h1 em{color:var(--purple);font-style:normal;}
+h1 small{display:block;font-size:clamp(13px,2.5vw,17px);color:var(--text2);font-weight:400;margin-top:10px;letter-spacing:0.02em;}
+.header-stats{display:flex;justify-content:center;gap:32px;margin-top:28px;flex-wrap:wrap;}
+.stat{text-align:center;}
+.stat-num{font-size:22px;font-weight:700;color:var(--purple);}
+.stat-label{font-size:11px;color:var(--text3);margin-top:2px;}
+.tutorial{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px 24px;margin-bottom:32px;}
+.tutorial-title{font-size:13px;font-weight:700;color:var(--purple);letter-spacing:0.08em;margin-bottom:14px;}
+.tutorial-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;}
+.t-step{display:flex;align-items:flex-start;gap:10px;}
+.t-num{width:22px;height:22px;border-radius:50%;background:var(--purple-dim);border:1px solid rgba(155,135,255,0.3);color:var(--purple);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.t-text{font-size:12px;color:var(--text2);line-height:1.5;}
+.t-text strong{color:var(--text);display:block;font-size:12px;margin-bottom:1px;}
+.recommend-wrap{margin-bottom:32px;}
+.recommend-title{font-size:12px;font-weight:700;color:var(--text3);letter-spacing:0.08em;margin-bottom:10px;}
+.recommend-list{display:flex;flex-wrap:wrap;gap:8px;}
+.rec-btn{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;padding:7px 14px;border-radius:99px;cursor:pointer;border:1px solid var(--border2);background:var(--purple-dim);color:var(--purple);transition:background .15s,transform .1s;user-select:none;}
+.rec-btn:hover{background:rgba(155,135,255,0.2);}
+.rec-btn:active{transform:scale(0.97);}
+.rec-tag{font-size:10px;background:rgba(155,135,255,0.2);padding:1px 6px;border-radius:99px;margin-left:2px;}
+.sec{margin-bottom:40px;}
+.sec-head{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+.tag{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;letter-spacing:0.08em;padding:4px 12px;border-radius:99px;}
+.tag-base{background:var(--purple-dim);color:var(--purple);border:1px solid rgba(155,135,255,0.25);}
+.tag-mod{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(240,192,96,0.25);}
+.tag-out{background:var(--teal-dim);color:var(--teal);border:1px solid rgba(78,205,196,0.25);}
+.sec-title{font-size:16px;font-weight:700;color:var(--text);}
+.sec-note{font-size:12px;color:var(--text3);margin-left:auto;}
+.sec-hint{font-size:12px;color:var(--text3);margin-bottom:10px;padding:8px 12px;background:var(--surface);border-left:2px solid var(--purple);border-radius:0 var(--r-sm) var(--r-sm) 0;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:8px;}
+.grid-out{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px 13px;cursor:pointer;transition:border-color .15s,background .15s,transform .1s;user-select:none;-webkit-tap-highlight-color:transparent;position:relative;}
+.card:hover{border-color:var(--border2);background:var(--surface2);}
+.card:active{transform:scale(0.96);}
+.card.ab{border-color:var(--purple);background:var(--purple-dim);}
+.card.am{border-color:var(--gold);background:var(--gold-dim);}
+.card.ao{border-color:var(--teal);background:var(--teal-dim);}
+.card-icon{font-size:20px;margin-bottom:5px;}
+.card-name{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.card.ab .card-name{color:var(--purple);}
+.card.am .card-name{color:var(--gold);}
+.card.ao .card-name{font-size:13px;color:var(--teal);}
+.card-desc{font-size:11px;color:var(--text3);line-height:1.4;}
+.card-preview{font-size:10px;color:var(--text3);margin-top:8px;padding-top:8px;border-top:1px solid var(--border);line-height:1.5;font-family:monospace;}
+.tooltip{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1a1a2e;border:1px solid var(--border2);border-radius:var(--r-sm);padding:10px 12px;font-size:11px;color:var(--text2);line-height:1.6;width:220px;z-index:100;pointer-events:none;text-align:left;}
+.tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1a1a2e;}
+.card:hover .tooltip{display:block;}
+.mod-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px;flex-wrap:wrap;}
+.mod-count{font-size:12px;color:var(--text3);}
+.mod-count span{color:var(--gold);font-weight:700;}
+.pills{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;min-height:0;}
+.pill{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:500;padding:3px 9px;border-radius:99px;background:var(--gold-dim);color:var(--gold);border:1px solid rgba(240,192,96,0.25);}
+.compat-box{border-radius:var(--r-sm);padding:10px 14px;margin-bottom:10px;display:flex;align-items:flex-start;gap:10px;font-size:12px;line-height:1.5;}
+.compat-box.warn{background:var(--warn-dim);border:1px solid rgba(239,159,39,0.3);}
+.compat-box.ok{background:var(--ok-dim);border:1px solid rgba(30,138,74,0.3);}
+.compat-box.neutral{background:var(--surface);border:1px solid var(--border);}
+.compat-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.compat-text strong{display:block;font-size:12px;font-weight:700;margin-bottom:2px;}
+.compat-box.warn .compat-text strong{color:var(--warn);}
+.compat-box.ok .compat-text strong{color:var(--ok);}
+.compat-box.neutral .compat-text strong{color:var(--text2);}
+.compat-text span{color:var(--text3);font-size:11px;}
+.required-box{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r-sm);padding:12px 14px;margin-bottom:10px;}
+.required-title{font-size:11px;font-weight:700;color:var(--purple);margin-bottom:8px;letter-spacing:0.06em;}
+.required-items{display:flex;flex-wrap:wrap;gap:6px;}
+.req-item{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:3px 10px;border-radius:99px;background:var(--purple-dim);color:var(--purple);border:1px solid rgba(155,135,255,0.25);}
+hr{border:none;border-top:1px solid var(--border);margin:36px 0;}
+.out-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap;}
+.out-title{font-size:15px;font-weight:700;color:var(--text);}
+.out-sub{font-size:12px;color:var(--text3);margin-top:2px;}
+.out-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;font-size:12px;font-family:'Noto Sans JP',monospace;color:var(--text2);white-space:pre-wrap;line-height:1.9;min-height:110px;max-height:320px;overflow-y:auto;transition:border-color .2s;}
+.out-box.has{color:var(--text);border-color:var(--border2);}
+.out-box::-webkit-scrollbar{width:4px;}
+.out-box::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px;}
+.btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-family:'Noto Sans JP',sans-serif;font-weight:500;padding:9px 18px;border-radius:var(--r-sm);cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--text2);transition:background .15s,color .15s,transform .1s;}
+.btn:hover{background:var(--surface2);color:var(--text);}
+.btn:active{transform:scale(0.97);}
+.btn-copy{background:var(--purple);color:#fff;border-color:var(--purple);font-weight:700;padding:10px 24px;}
+.btn-copy:hover{background:var(--purple2);border-color:var(--purple2);color:#fff;}
+.btn-copy.ok{background:var(--ok);border-color:var(--ok);}
+.btn-group{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
+.notice{background:var(--surface);border:1px dashed var(--border2);border-radius:var(--r);padding:18px 22px;text-align:center;margin-top:40px;}
+.notice p{font-size:13px;color:var(--text2);}
+.notice small{font-size:11px;color:var(--text3);}
+footer{text-align:center;padding:32px 0 0;border-top:1px solid var(--border);font-size:12px;color:var(--text3);line-height:2;}
+@media(max-width:600px){.grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));}.grid-out{grid-template-columns:1fr;}header{padding:40px 0 32px;}.tutorial-steps{grid-template-columns:1fr;}.header-stats{gap:20px;}.tooltip{display:none!important;}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+<div class="wrap">
+
+<header>
+  <div class="badge-vip">✦ VIP MEMBERS ONLY ✦</div>
+  <h1>占い<em>MOD</em>システム<small>ベース9種 × MOD15種 × 出力形式3種 — あなただけの占いAIを作る</small></h1>
+  <div class="header-stats">
+    <div class="stat"><div class="stat-num">9</div><div class="stat-label">占いベース</div></div>
+    <div class="stat"><div class="stat-num">15</div><div class="stat-label">MODの種類</div></div>
+    <div class="stat"><div class="stat-num">3</div><div class="stat-label">出力形式</div></div>
+    <div class="stat"><div class="stat-num">884,736<span style="font-size:14px;">+</span></div><div class="stat-label">組み合わせ</div></div>
+  </div>
+</header>
+
+<div class="tutorial">
+  <div class="tutorial-title">🔰 はじめての方へ — 使い方ガイド</div>
+  <div class="tutorial-steps">
+    <div class="t-step"><div class="t-num">1</div><div class="t-text"><strong>占いベースを選ぶ</strong>占いの種類を1つ選択。迷ったら「西洋占星術」がおすすめ！</div></div>
+    <div class="t-step"><div class="t-num">2</div><div class="t-text"><strong>MODを重ねる</strong>カスタマイズを追加。1〜3個が使いやすい。0個でもOK！</div></div>
+    <div class="t-step"><div class="t-num">3</div><div class="t-text"><strong>出力形式を選ぶ</strong>迷ったら「通常」でOK。SNS用・鑑定書も試してみて！</div></div>
+    <div class="t-step"><div class="t-num">4</div><div class="t-text"><strong>コピーしてGemへ</strong>「コピー」ボタン→GeminiのGem→システムプロンプトに貼り付け！</div></div>
+    <div class="t-step"><div class="t-num">5</div><div class="t-text"><strong>占ってもらう</strong>Gemに必要情報を伝えると鑑定スタート✨</div></div>
+  </div>
+</div>
+
+<div class="recommend-wrap">
+  <div class="recommend-title">⚡ おすすめの組み合わせ — ワンタップで設定</div>
+  <div class="recommend-list">
+    <button class="rec-btn" onclick="applyRecommend(0)">💕 恋愛・復縁向け<span class="rec-tag">人気No.1</span></button>
+    <button class="rec-btn" onclick="applyRecommend(1)">💰 金運・副業向け<span class="rec-tag">稼ぎたい人に</span></button>
+    <button class="rec-btn" onclick="applyRecommend(2)">🔮 スピリチュアル向け<span class="rec-tag">深い鑑定</span></button>
+    <button class="rec-btn" onclick="applyRecommend(3)">📱 SNSシェア向け<span class="rec-tag">バズりやすい</span></button>
+    <button class="rec-btn" onclick="applyRecommend(4)">🌸 癒し・HSP向け<span class="rec-tag">繊細な人に</span></button>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-head">
+    <span class="tag tag-base">STEP 1</span>
+    <span class="sec-title">占いベースを選ぶ</span>
+    <span class="sec-note">1つだけ選択</span>
+  </div>
+  <div class="sec-hint">💡 カードにカーソルを乗せると詳しい説明が見られます</div>
+  <div class="grid" id="base-grid"></div>
+</div>
+
+<hr>
+
+<div class="sec">
+  <div class="sec-head">
+    <span class="tag tag-mod">STEP 2</span>
+    <span class="sec-title">MODを重ねる</span>
+  </div>
+  <div class="sec-hint">💡 MODは複数選択できます。0個でも使えます。1〜3個がおすすめ！</div>
+  <div class="mod-bar">
+    <div class="mod-count">選択中：<span id="mc">0</span> / 15</div>
+    <button class="btn" style="font-size:11px;padding:4px 12px;" onclick="clearMods()">すべて解除</button>
+  </div>
+  <div class="pills" id="pills"></div>
+  <div class="grid" id="mod-grid"></div>
+</div>
+
+<hr>
+
+<div class="sec">
+  <div class="sec-head">
+    <span class="tag tag-out">STEP 3</span>
+    <span class="sec-title">出力形式を選ぶ</span>
+    <span class="sec-note">1つだけ</span>
+  </div>
+  <div class="sec-hint">💡 はじめては「通常」がおすすめ！</div>
+  <div class="grid-out" id="out-grid"></div>
+</div>
+
+<hr>
+
+<div class="sec">
+  <div class="out-head">
+    <div>
+      <div class="out-title">STEP 4 — 合成プロンプト</div>
+      <div class="out-sub">「コピー」→ GeminiのGem → システムプロンプト欄に貼り付けて完成！</div>
+    </div>
+    <button class="btn btn-copy" id="cbtn" onclick="copyText()">コピー</button>
+  </div>
+  <div id="required-area"></div>
+  <div id="compat-area"></div>
+  <div class="out-box" id="out">← まずSTEP1で占いベースを選んでください</div>
+  <div class="btn-group">
+    <button class="btn" onclick="clearAll()">🔄 最初からやり直す</button>
+  </div>
+</div>
+
+<div class="notice">
+  <p>🔒 このページはBrain購入者限定特典です</p>
+  <small>URLの第三者への共有・SNSへの公開はご遠慮ください</small>
+</div>
+<footer>
+  <p>Brain購入者限定 — 転載・再配布禁止</p>
+  <p style="margin-top:4px;font-size:11px;">© 2024 VIP占いMODシステム</p>
+</footer>
+
+</div>
+<script>
+const BASES=[
+  {n:"西洋占星術",i:"⭐",d:"12星座・惑星で鑑定",tip:"生年月日から太陽星座・月星座を読み解きます。恋愛・仕事・金運など総合的に鑑定できます。",req:["生年月日（例：1990年5月15日）","お名前またはニックネーム","今日のご相談内容"],reqPrompt:`【必須情報の確認ルール】
+鑑定を開始する前に、必ず以下の3つを確認してください。
+①生年月日（例：1990年5月15日）
+②お名前またはニックネーム
+③今日のご相談内容
+これらがすべて揃っていない場合は鑑定を始めず、以下のように聞き返してください。
+「鑑定を始める前に、生年月日・お名前・今日のご相談内容を教えていただけますか？🔮」`,t:"あなたはプロの西洋占星術師です。ユーザーの生年月日から太陽星座・月星座・アセンダントを特定し、全体運・恋愛運・仕事運・金運の4項目で詳しく鑑定してください。最後に今月のラッキーカラーとラッキーアイテムを教えてください。"},
+  {n:"タロット占い",i:"🃏",d:"3枚引きで過去・現在・未来",tip:"78枚のカードを使い過去・現在・未来を読み解きます。具体的な相談に強いです。",req:["お名前またはニックネーム","今日のご相談内容（具体的に）"],reqPrompt:`【必須情報の確認ルール】
+鑑定を開始する前に、必ず以下の2つを確認してください。
+①お名前またはニックネーム
+②今日のご相談内容（できるだけ具体的に）
+これらが揃っていない場合は鑑定を始めず、以下のように聞き返してください。
+「カードを展開する前に、お名前と今日の具体的なご相談内容を教えていただけますか？🃏」`,t:"あなたはプロのタロット占い師です。ユーザーの質問に対して、3枚引き（過去・現在・未来）でタロットカードを展開してください。各カードの意味と組み合わせを読み解き、具体的なアドバイスを伝えてください。カード名は正位置・逆位置も含めて明示してください。"},
+  {n:"数秘術",i:"🔢",d:"誕生数・運命数で鑑定",tip:"生年月日の数字を使って人生の使命や才能を読み解きます。",req:["生年月日（例：1990年5月15日）","お名前またはニックネーム","今日のご相談内容"],reqPrompt:`【必須情報の確認ルール】
+鑑定を開始する前に、必ず以下の3つを確認してください。
+①生年月日（例：1990年5月15日）
+②お名前またはニックネーム
+③今日のご相談内容
+これらが揃っていない場合は鑑定を始めず、以下のように聞き返してください。
+「数秘術の鑑定には生年月日が必要です。生年月日・お名前・ご相談内容を教えていただけますか？🔢」`,t:"あなたはプロの数秘術師です。ユーザーの生年月日から「誕生数」「運命数」「魂の数」を計算し、それぞれの意味と現在の運勢を鑑定してください。数字が持つエネルギーと今後の人生への影響を詳しく教えてください。"},
+  {n:"四柱推命",i:"🀄",d:"生年月日で命式を読む",tip:"東洋最古の占術。人生全体の運気の流れを読みます。",req:["生年月日（例：1990年5月15日）","生まれた時間（わかれば）","お名前またはニックネーム","今日のご相談内容"],reqPrompt:`【必須情報の確認ルール】
+鑑定を開始する前に、必ず以下を確認してください。
+①生年月日（例：1990年5月15日）※必須
+②生まれた時間（例：午前10時）※わかる範囲で
+③お名前またはニックネーム
+④今日のご相談内容
+これらが揃っていない場合は鑑定を始めず、以下のように聞き返してください。
+「四柱推命の鑑定には生年月日が必要です。また生まれた時間もわかれば教えてください。お名前とご相談内容もあわせてお願いします🀄」`,t:"あなたはプロの四柱推命師です。ユーザーの生年月日をもとに四柱推命で鑑定してください。命式から性格・才能・運勢の流れを読み解き、今年・来年の大きな運気の変化についても教えてください。"},
+  {n:"九星気学",i:"🧭",d:"九星・方位で開運指導",tip:"生まれ年から本命星を割り出し、今年の運勢と吉方位を鑑定します。",req:["生まれ年（例：1990年）","お名前またはニックネーム","今日のご相談内容"],reqPrompt:`【必須情報の確認ルール】
+鑑定を開始する前に、必ず以下の3つを確認してください。
+①生まれ年（例：1990年）
+②お名前またはニックネーム
+③今日のご相談内容
+これらが揃っていない場合は鑑定を始めず、以下のように聞き返してください。
+「九星気学の鑑定には生まれ年が必要です。生まれ年・お名前・ご相談内容を教えていただけますか？🧭」`,t:"あなたはプロの九星気学師です。ユーザーの生年から本命星を特定し、今年の運勢・吉方位・凶方位を鑑定してください。仕事・引越し・旅行における方位の活用法も具体的にアドバイスしてください。"},
+
+  {n:"風水",i:"🏮",d:"環境・方位で運気を上げる",tip:"住環境・インテリアの配置で運気を上げる東洋の知恵です。",req:["住まいの間取り・特徴","現在の悩みや改善したいこと","お名前またはニックネーム"],reqPrompt:`【必須情報の確認ルール】
+鑑定を開始する前に、必ず以下の3つを確認してください。
+①住まいの間取りや特徴（例：1LDK・玄関が北向きなど）
+②現在の悩みや改善したいこと（金運・恋愛運・健康運など）
+③お名前またはニックネーム
+これらが揃っていない場合は鑑定を始めず、以下のように聞き返してください。
+「風水鑑定のために、住まいの間取りや特徴、改善したいこと、お名前を教えていただけますか？🏮」`,t:"あなたはプロの風水師です。ユーザーの住環境・間取り・悩みをもとに開運のための風水アドバイスを提供してください。部屋の配置・色・インテリアの改善点を具体的に提案し、金運・恋愛運・健康運それぞれへの効果も説明してください。"},
+  {n:"血液型占い",i:"🩸",d:"血液型で性格・相性鑑定",tip:"A・B・O・AB型から性格・恋愛傾向・仕事スタイルを鑑定します。",req:["あなたの血液型","相手の血液型（相性鑑定の場合）","お名前またはニックネーム","今日のご相談内容"],reqPrompt:`【必須情報の確認ルール】
+鑑定を開始する前に、必ず以下を確認してください。
+①あなたの血液型（A・B・O・AB）
+②相手の血液型（相性鑑定の場合）
+③お名前またはニックネーム
+④今日のご相談内容
+これらが揃っていない場合は鑑定を始めず、以下のように聞き返してください。
+「鑑定のために、あなたの血液型・お名前・ご相談内容を教えてください。相性鑑定の場合は相手の血液型もお願いします🩸」`,t:"あなたはプロの血液型占い師です。ユーザーの血液型をもとに性格・恋愛傾向・仕事スタイル・対人関係を詳しく鑑定してください。相性の良い血液型・注意が必要な血液型についても具体的に教えてください。"},
+  {n:"動物占い",i:"🐾",d:"60種の動物キャラで鑑定",tip:"生年月日から60種類の動物キャラクターを特定し、性格・才能・恋愛を鑑定します。",req:["生年月日（例：1990年5月15日）","お名前またはニックネーム","今日のご相談内容"],reqPrompt:`【必須情報の確認ルール】
+鑑定を開始する前に、必ず以下の3つを確認してください。
+①生年月日（例：1990年5月15日）
+②お名前またはニックネーム
+③今日のご相談内容
+これらが揃っていない場合は鑑定を始めず、以下のように聞き返してください。
+「動物占いには生年月日が必要です！生年月日・お名前・ご相談内容を教えていただけますか？🐾」`,t:"あなたはプロの動物占い師です。ユーザーの生年月日から該当する動物キャラクターを特定し、性格・才能・恋愛スタイル・仕事運を鑑定してください。相性の良い動物・苦手な動物も教えてください。"},
+  {n:"オラクルカード",i:"🌟",d:"天使・妖精からのメッセージ",tip:"天使や妖精からのメッセージカードを引いて、今の状況へのガイダンスを受け取ります。",req:["お名前またはニックネーム","今日のご相談内容または知りたいこと"],reqPrompt:`【必須情報の確認ルール】
+鑑定を開始する前に、必ず以下の2つを確認してください。
+①お名前またはニックネーム
+②今日のご相談内容または知りたいこと
+これらが揃っていない場合は鑑定を始めず、以下のように聞き返してください。
+「カードを引く前に、お名前と今日知りたいことを教えていただけますか？✨」`,t:"あなたはプロのオラクルカードリーダーです。ユーザーの悩みや質問に対して天使や妖精からのメッセージカードを3枚引いてください。各カードのメッセージを優しく読み解き、今の状況への具体的なガイダンスを伝えてください。"},
+];
+
+const MODS=[
+  {n:"復縁・元カレMOD",i:"💔",d:"復縁の可能性と行動を鑑定",tip:"復縁に特化した鑑定。相手の今の気持ち・連絡するタイミング・復縁成功率を上げる行動を詳しく教えてくれます。",t:"【MOD: 復縁・元カレ特化】復縁の可能性・相手の今の気持ち・最適なアプローチのタイミングを詳しく鑑定してください。「連絡していいタイミング」「絶対にやってはいけないこと」「復縁成功率を上げる具体的な行動」を必ず含めてください。"},
+  {n:"不倫・複雑恋愛MOD",i:"🌹",d:"複雑な恋愛関係を深掘り",tip:"誰にも相談できない複雑な恋愛を、批判せず寄り添いながら鑑定。相手の本音と関係の行方を読み解きます。",t:"【MOD: 複雑恋愛特化】不倫・W不倫・既婚者との恋愛など複雑な恋愛関係について、相手の本音・この関係の行方・あなたが取るべき選択を霊的な視点から鑑定してください。批判せず、ありのままを受け止めて寄り添う姿勢で答えてください。"},
+  {n:"結婚・婚期MOD",i:"💍",d:"結婚のタイミングと相手を鑑定",tip:"結婚のタイミング・運命の相手の特徴・今の交際相手との結婚可能性を鑑定。何歳頃に縁が来るかも教えてくれます。",t:"【MOD: 結婚・婚期特化】結婚のタイミング・運命の相手の特徴・今の交際相手との結婚の可能性を詳しく鑑定してください。「何歳頃に結婚の縁が訪れるか」「結婚相手が現れる場所・状況」「結婚運を高めるための行動」を具体的に伝えてください。"},
+  {n:"片思い成就MOD",i:"🌸",d:"好きな人との縁と成就を鑑定",tip:"片思いの相手の気持ち・2人の縁の深さ・告白の最適なタイミングを教えてくれます。",t:"【MOD: 片思い成就特化】片思いの相手の気持ち・2人の縁の深さ・告白の最適なタイミングを鑑定してください。「相手があなたをどう思っているか」「距離を縮めるための具体的なアクション」「成就しやすい日・状況」を必ず含めてください。"},
+  {n:"夫婦・パートナーMOD",i:"👫",d:"夫婦関係・パートナーの本音",tip:"夫婦・カップルの関係改善に特化。相手の本音と不満・関係が良くなる方法を読み解きます。",t:"【MOD: 夫婦・パートナー特化】夫婦関係・パートナーシップの深層を鑑定してください。「相手の本音と不満」「関係改善のためにすべきこと」「2人の今後の運命」を具体的に読み解き、実践的なアドバイスを伝えてください。"},
+  {n:"ツインレイMOD",i:"🔥",d:"魂の繋がりを深掘り鑑定",tip:"ツインレイ・ソウルメイトかどうかの判定・サイレント期間の意味・統合へのタイミングを鑑定します。",t:"【MOD: ツインレイ・ソウルメイト特化】この人がツインレイかどうか・魂のレベルでの繋がりの深さ・サイレント期間の意味と終わりのタイミングを鑑定してください。「統合へ向けての課題」「ランナーとチェイサーの関係」「今あなたに必要な魂の成長」を神秘的に伝えてください。"},
+  {n:"副業・起業開運MOD",i:"💹",d:"副業・起業の運気とタイミング",tip:"副業・起業・独立のタイミングと適性を鑑定。今が動くべき時期かどうかを教えてくれます。",t:"【MOD: 副業・起業開運特化】副業・起業・独立のタイミングと適性を鑑定してください。「今が動くべき時期かどうか」「あなたに向いているビジネスジャンル」「成功するために必要な要素と注意点」「収入が上がる時期」を具体的にアドバイスしてください。"},
+  {n:"転職・天職MOD",i:"🎯",d:"転職・天職・適職を鑑定",tip:"今の仕事を続けるべきか転職すべきかの判断・天職・適職を鑑定します。",t:"【MOD: 転職・天職特化】転職のタイミング・天職・適職を鑑定してください。「今の仕事を続けるべきか転職すべきか」「あなたの才能が最も活かせる職種・環境」「転職が成功しやすい時期」「仕事運が上がるために今すべきこと」を具体的に伝えてください。"},
+  {n:"引き寄せの法則MOD",i:"✨",d:"願いを引き寄せる方法を鑑定",tip:"潜在意識のブロック・手放すべきもの・アファメーションの方法を占いと組み合わせて教えてくれます。",t:"【MOD: 引き寄せ特化】占いの結果を引き寄せの法則と組み合わせて解釈してください。「潜在意識のブロックになっているもの」「願いを引き寄せるために手放すべきもの」「アファメーション・行動・意識の変え方」を具体的にアドバイスしてください。"},
+  {n:"前世・カルマMOD",i:"🔮",d:"前世の使命とカルマを読む",tip:"前世での職業・人間関係・今世に持ち越しているカルマ・魂の使命を詳しく読み解きます。",t:"【MOD: 前世・カルマ特化】前世での経験・今世に持ち越しているカルマ・魂の使命を詳しく読み解いてください。「前世での職業・人間関係・未解決の課題」「今世でカルマを解消するために必要な行動」「魂が本当に望んでいること」を神秘的かつ具体的に伝えてください。"},
+  {n:"毒親・家族問題MOD",i:"🌿",d:"家族関係の癒しと解放を鑑定",tip:"家族・毒親との関係が運勢に与えている影響を優しく鑑定。心の癒しと自己解放のタイミングをアドバイスします。",t:"【MOD: 家族・毒親問題特化】家族関係・毒親との関係・家庭環境が与えている影響を鑑定してください。批判せず受け止める姿勢で「この関係から学ぶべきカルマ」「心の癒しと自己解放のタイミング」「境界線を作るための具体的な方法」を優しく伝えてください。"},
+  {n:"HSP・繊細さんMOD",i:"🌙",d:"繊細な魂へのメッセージ",tip:"HSPや繊細な人向けに、傷つきやすい心に最大限配慮した鑑定。繊細さが才能になる分野を穏やかに伝えます。",t:"【MOD: HSP・繊細さん特化】HSP・繊細な感受性を持つ人に向けて、傷つきやすい心への配慮を最大限にしながら鑑定してください。「あなたの繊細さが才能になる分野」「エネルギーを守るための方法」「人間関係で消耗しないための境界線の引き方」を穏やかに伝えてください。"},
+  {n:"推し活・縁結びMOD",i:"💜",d:"推しとの縁・運命を鑑定",tip:"推し・憧れの人との前世の縁・スピリチュアルな繋がりを鑑定。縁が深まるタイミングを楽しく教えてくれます。",t:"【MOD: 推し活・縁結び特化】推し・憧れの人との縁・スピリチュアルな繋がりを鑑定してください。「前世での縁の有無」「夢や偶然の一致が持つ意味」「推し活があなたの魂に与えているエネルギー」「縁が深まる行動・タイミング」を楽しく神秘的に伝えてください。"},
+  {n:"開運日・タイミングMOD",i:"📅",d:"行動すべき吉日を鑑定",tip:"今月の最強開運日・新しいことを始めるべき日・重要な決断に最適な時期を教えてくれます。",t:"【MOD: 開運タイミング特化】鑑定結果に加えて、行動すべき吉日・避けるべき凶日・運気の波のタイミングを具体的に伝えてください。「今月の最強開運日」「新しいことを始めるべき日」「重要な決断をするのに最適な時期」を暦・数字・星の動きで読み解いてください。"},
+  {n:"夢診断・潜在意識MOD",i:"💭",d:"夢と潜在意識を読み解く",tip:"最近見た夢のメッセージ・潜在意識が伝えようとしていること・無意識のブロックを読み解きます。",t:"【MOD: 夢診断・潜在意識特化】占いの結果と潜在意識・夢のメッセージを組み合わせて鑑定してください。「最近見た夢に隠されたメッセージ」「潜在意識があなたに伝えようとしていること」「思考のブロックになっている無意識のパターン」「本当の自分が望んでいること」を深く読み解いてください。"},
+];
+
+const OUTPUTS=[
+  {n:"通常",i:"💬",d:"自然な会話形式",tip:"占い師が語りかけるような自然なテキストで出力。はじめての方・普段使いにおすすめ。",preview:"占い師が語りかけるような\n自然なテキストで出力",t:""},
+  {n:"鑑定書形式",i:"📜",d:"正式な鑑定書レイアウト",tip:"「○○様」と名前を呼びかける正式な鑑定書フォーマット。スクショ保存にも映えます。",preview:"━━━━━━━━━\n✦ 鑑定書 ✦\n【総合運】\n【恋愛運】\n【仕事運】\n【金運】\n━━━━━━━━━",t:`【出力形式: 鑑定書】鑑定結果を以下の正式な鑑定書フォーマットで出力してください。
+
+━━━━━━━━━━━━━━━━━━
+✦ 占い鑑定書 ✦
+━━━━━━━━━━━━━━━━━━
+お名前：[ユーザーのお名前]様
+鑑定日：[今日の日付]
+鑑定方法：[使用した占術名]
+━━━━━━━━━━━━━━━━━━
+
+【✨ 総合運】
+（200字程度で詳しく）
+
+【💕 恋愛運】
+（200字程度で詳しく）
+
+【💼 仕事運】
+（200字程度で詳しく）
+
+【💰 金運】
+（200字程度で詳しく）
+
+【🌟 今月のラッキーポイント】
+・ラッキーカラー：
+・ラッキーアイテム：
+・ラッキーデー：
+・ラッキーナンバー：
+
+【💌 鑑定師からのメッセージ】
+（締めくくりの言葉・100字程度）
+
+━━━━━━━━━━━━━━━━━━
+※この鑑定書はあなただけへの特別な鑑定です
+━━━━━━━━━━━━━━━━━━`},
+  {n:"SNS投稿用",i:"📱",d:"X・Instagram用に最適化",tip:"X用140字・Instagram用キャプション・LINE友人シェア用の3パターンを同時出力。",preview:"【X用・140字】\n今日の運勢は...\n\n【Instagram用】\n詳しい鑑定...\n#占い #運勢",t:`【出力形式: SNS投稿用】鑑定結果を以下の3つのSNS投稿フォーマットで出力してください。
+
+---
+【🐦 X（Twitter）投稿用 — 140字以内】
+（インパクトある一言から始め、絵文字を効果的に使用。リプライを誘発する問いかけで締める）
+
+---
+【📸 Instagram投稿用キャプション】
+（冒頭に引きつける一文→鑑定の要点3つを箇条書き→共感を呼ぶ締めくくり。300字程度）
+
+ハッシュタグ案：
+#占い #今日の運勢 #スピリチュアル（＋内容に合わせた5〜8個）
+
+---
+【💬 LINE・友人へのシェア用】
+（友達に送るような親しみやすい口調で、鑑定の面白いポイントをサクッと紹介。150字程度）
+---`},
+];
+
+const COMPAT_BAD={5:[13],7:[5,9,10],6:[3,4],8:[9,14]};
+
+let sb=null,so=0;
+const sm=new Set();
+
+const RECOMMENDS=[
+  {base:1,mods:[0,2,3],out:0},
+  {base:0,mods:[6,7],out:0},
+  {base:9,mods:[5,9,10],out:0},
+  {base:1,mods:[3,12],out:2},
+  {base:0,mods:[11,4],out:0},
+];
+
+function applyRecommend(i){
+  const r=RECOMMENDS[i];
+  sb=r.base;so=r.out;sm.clear();
+  r.mods.forEach(m=>sm.add(m));
+  renderBases();renderMods();renderOutputs();update();
+  document.getElementById('base-grid').scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function renderBases(){
+  const g=document.getElementById('base-grid');g.innerHTML='';
+  BASES.forEach((b,i)=>{
+    const d=document.createElement('div');
+    d.className='card'+(sb===i?' ab':'');
+    d.innerHTML=`<div class="card-icon">${b.i}</div><div class="card-name">${b.n}</div><div class="card-desc">${b.d}</div><div class="tooltip">${b.tip}</div>`;
+    d.onclick=()=>{sb=sb===i?null:i;renderBases();update();};
+    g.appendChild(d);
+  });
+}
+
+function renderMods(){
+  const g=document.getElementById('mod-grid');g.innerHTML='';
+  MODS.forEach((m,i)=>{
+    const d=document.createElement('div');
+    d.className='card'+(sm.has(i)?' am':'');
+    d.innerHTML=`<div class="card-icon">${m.i}</div><div class="card-name">${m.n}</div><div class="card-desc">${m.d}</div><div class="tooltip">${m.tip}</div>`;
+    d.onclick=()=>{sm.has(i)?sm.delete(i):sm.add(i);renderMods();update();};
+    g.appendChild(d);
+  });
+  document.getElementById('mc').textContent=sm.size;
+  const p=document.getElementById('pills');
+  p.innerHTML=sm.size>0?[...sm].map(i=>`<span class="pill">${MODS[i].i} ${MODS[i].n}</span>`).join(''):'';
+}
+
+function renderOutputs(){
+  const g=document.getElementById('out-grid');g.innerHTML='';
+  OUTPUTS.forEach((o,i)=>{
+    const d=document.createElement('div');
+    d.className='card'+(so===i?' ao':'');
+    d.innerHTML=`<div class="card-icon">${o.i}</div><div class="card-name">${o.n}</div><div class="card-desc">${o.d}</div><div class="card-preview">${o.preview}</div><div class="tooltip">${o.tip}</div>`;
+    d.onclick=()=>{so=i;renderOutputs();update();};
+    g.appendChild(d);
+  });
+}
+
+function showRequired(){
+  const area=document.getElementById('required-area');
+  if(sb===null){area.innerHTML='';return;}
+  const items=BASES[sb].req.map(r=>`<span class="req-item">✦ ${r}</span>`).join('');
+  area.innerHTML=`<div class="required-box"><div class="required-title">📋 ${BASES[sb].n} に必要な情報（Gemに伝えてください）</div><div class="required-items">${items}</div></div>`;
+}
+
+function checkCompat(){
+  const area=document.getElementById('compat-area');
+  if(sb===null){area.innerHTML='';return;}
+  const badMods=COMPAT_BAD[sb]||[];
+  const conflicts=[...sm].filter(i=>badMods.includes(i));
+  if(conflicts.length>0){
+    const names=conflicts.map(i=>MODS[i].n).join('・');
+    area.innerHTML=`<div class="compat-box warn"><div class="compat-icon">⚠️</div><div class="compat-text"><strong>この組み合わせは相性がやや低めです</strong><span>${BASES[sb].n}と「${names}」は方向性が異なるため、出力が不自然になる場合があります。別のMODも試してみてください。</span></div></div>`;
+  } else if(sm.size>0){
+    area.innerHTML=`<div class="compat-box ok"><div class="compat-icon">✅</div><div class="compat-text"><strong>相性の良い組み合わせです</strong><span>選択中の組み合わせは相性が良く、高品質な鑑定が期待できます！</span></div></div>`;
+  } else {
+    area.innerHTML=`<div class="compat-box neutral"><div class="compat-icon">💡</div><div class="compat-text"><strong>ベースのみの鑑定</strong><span>このままコピーして使えます。MODを追加するとさらにカスタマイズできます！</span></div></div>`;
+  }
+}
+
+function update(){
+  const o=document.getElementById('out');
+  if(sb===null){
+    o.textContent='← まずSTEP1で占いベースを選んでください';
+    o.classList.remove('has');
+    document.getElementById('required-area').innerHTML='';
+    document.getElementById('compat-area').innerHTML='';
+    return;
+  }
+  let r=BASES[sb].reqPrompt+'\n\n【ベース: '+BASES[sb].n+'】\n'+BASES[sb].t;
+  if(sm.size>0)r+='\n\n'+ [...sm].map(i=>MODS[i].t).join('\n\n');
+  if(OUTPUTS[so].t)r+='\n\n'+OUTPUTS[so].t;
+  o.textContent=r;o.classList.add('has');
+  showRequired();checkCompat();
+}
+
+function clearMods(){sm.clear();renderMods();update();}
+function clearAll(){sb=null;sm.clear();so=0;renderBases();renderMods();renderOutputs();update();}
+
+function copyText(){
+  const o=document.getElementById('out');
+  if(!o.classList.contains('has'))return;
+  navigator.clipboard.writeText(o.textContent).then(()=>{
+    const b=document.getElementById('cbtn');
+    b.textContent='✓ コピー完了';b.classList.add('ok');
+    setTimeout(()=>{b.textContent='コピー';b.classList.remove('ok');},2500);
+  });
+}
+
+renderBases();renderMods();renderOutputs();
+</script>
+</body>
+</html>
